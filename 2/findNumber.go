@@ -7,6 +7,7 @@ import (
 	"os"
 )
 
+// function for find missing number
 func findLostNumber(input string, kali int) (int, bool) {
 	var idxStartLast int
 	var idxNextfirst int
@@ -16,6 +17,7 @@ func findLostNumber(input string, kali int) (int, bool) {
 	var i int
 	result := 0
 	err := true
+
 
 	for i=0; i<=len(input);i+=kali {	
 	
@@ -48,9 +50,10 @@ func findLostNumber(input string, kali int) (int, bool) {
 					i+=1
 				}
 
+
 				// second index of first number
 				if i + kali < len(input) {
-					idxStartLast += 1
+					idxStartLast += 2
 				} else {
 					idxStartLast = len(input)
 				}
@@ -58,20 +61,20 @@ func findLostNumber(input string, kali int) (int, bool) {
 				// first index of second number
 
 				if i + kali < len(input) {	
-					idxNextfirst += 1
+					idxNextfirst += 2
 				} else {
 					idxNextfirst = len(input)
 				}
 		
 				// second index of second number
 				if idxNextfirst + kali < len(input) {
-					idxNextLast += 1
+					idxNextLast += 2
 				} else {
 					idxNextLast = len(input)
 				}
 			}
 
-			// pindah digit
+			// add number digit
 			if input[i:idxStartLast] == "9" || 
 			input[i:idxStartLast] == "99" || 
 			input[i:idxStartLast] == "999" || 
@@ -82,12 +85,11 @@ func findLostNumber(input string, kali int) (int, bool) {
 				pindahDigit = true
 			}
 
+		// convert input to integer
 		firstNum, _ := strconv.Atoi(input[i:idxStartLast])
 		secNum, _ := strconv.Atoi(input[idxNextfirst:idxNextLast])
 
-		idxStartLast += 1
-		idxNextfirst += 1
-		idxNextLast += 1
+		// is number in sequence ?
 		if secNum == firstNum + 1 {
 			continue
 		} else if secNum == firstNum + 2 {
@@ -105,6 +107,7 @@ func loop(input string) (int, bool) {
 	var result int
 	var err bool = true
 
+	// looping number for run finLostNumber function
 	for i:=1; i<=6; i++ {
 		result, err = findLostNumber(input, i)
 		if err == false {
@@ -120,13 +123,16 @@ func main() {
 	fmt.Println("enter a list of number without space that you want to search, number must be in sequence. ex : 1112131516171819")
 	fmt.Println("Make sure the list of number that you insert is in correct format. If not program will automatically close :)")
 
+	// scan input from terminal
 	scanner := bufio.NewScanner(os.Stdin)
 	fmt.Printf("\ninput : ")
 	scanner.Scan()
 	input := scanner.Text()
 
+	// run loop function with input as a param
 	result, err := loop(input)
 
+	// if no error print result
 	if err == false {
 		fmt.Println("result :", result)
 	} else {
