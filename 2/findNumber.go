@@ -3,6 +3,8 @@ package main
 import (
 	"fmt"
 	"strconv"
+	"bufio"
+	"os"
 )
 
 func findLostNumber(input string, kali int) (int, bool) {
@@ -10,30 +12,63 @@ func findLostNumber(input string, kali int) (int, bool) {
 	var idxNextfirst int
 	var idxNextLast int
 	var pindahDigit bool = false
+	moveCount := 0
 	var i int
 	result := 0
 	err := true
 
-	for i=0; i<=len(input);i+=kali {		
-		// second index of first number
-		if i + kali < len(input) {
-			idxStartLast = i + kali
-		} else {
-			idxStartLast = len(input)
-		}
-
-		// first index of second number
-			if i + kali < len(input) {	
-				idxNextfirst = i + kali
-			} else {
-				idxNextfirst = len(input)
-			}
+	for i=0; i<=len(input);i+=kali {	
 	
-			// second index of second number
-			if idxNextfirst + kali < len(input) {
-				idxNextLast = idxNextfirst + kali	
+			if pindahDigit == false {
+				// second index of first number
+				if i + kali < len(input) {
+					idxStartLast = i + kali
+				} else {
+					idxStartLast = len(input)
+				}
+
+				// first index of second number
+
+				if i + kali < len(input) {	
+					idxNextfirst = i + kali
+				} else {
+					idxNextfirst = len(input)
+				}
+		
+				// second index of second number
+				if idxNextfirst + kali < len(input) {
+					idxNextLast = idxNextfirst + kali	
+				} else {
+					idxNextLast = len(input)
+				}
 			} else {
-				idxNextLast = len(input)
+				moveCount += 1
+
+				if moveCount > 1 {
+					i+=1
+				}
+
+				// second index of first number
+				if i + kali < len(input) {
+					idxStartLast += 1
+				} else {
+					idxStartLast = len(input)
+				}
+
+				// first index of second number
+
+				if i + kali < len(input) {	
+					idxNextfirst += 1
+				} else {
+					idxNextfirst = len(input)
+				}
+		
+				// second index of second number
+				if idxNextfirst + kali < len(input) {
+					idxNextLast += 1
+				} else {
+					idxNextLast = len(input)
+				}
 			}
 
 			// pindah digit
@@ -50,23 +85,11 @@ func findLostNumber(input string, kali int) (int, bool) {
 		firstNum, _ := strconv.Atoi(input[i:idxStartLast])
 		secNum, _ := strconv.Atoi(input[idxNextfirst:idxNextLast])
 
-		fmt.Println("A idx 1 :", i)
-		fmt.Println("A idx 2 :", idxStartLast)
-		fmt.Println("B idx 1 :", idxNextfirst)
-		fmt.Println("B idx 2 :", idxNextLast)
-		fmt.Println(firstNum)
-		fmt.Println(secNum)
-
-		fmt.Println("####################END########################")
-		
+		idxStartLast += 1
+		idxNextfirst += 1
+		idxNextLast += 1
 		if secNum == firstNum + 1 {
-			if pindahDigit == true {
-				idxStartLast += 1
-				idxNextfirst += 1
-				idxNextLast += 1
-				// pindahDigit = false
-			}
-			// continue
+			continue
 		} else if secNum == firstNum + 2 {
 			result = firstNum + 1
 			return result, false
@@ -78,18 +101,35 @@ func findLostNumber(input string, kali int) (int, bool) {
 		return result, err
 }
 
-func main() {
-	input := "78910213"
-
+func loop(input string) (int, bool) {
 	var result int
-	var err bool
+	var err bool = true
 
-	// looping max value
 	for i:=1; i<=6; i++ {
 		result, err = findLostNumber(input, i)
 		if err == false {
-			fmt.Println("angka yang hilang adalah :", result)
-			break
+			return result, err
 		}
+	}
+
+	return result, err
+}
+
+func main() {
+	fmt.Println("Welcome to find number app")
+	fmt.Println("enter a list of number without space that you want to search, number must be in sequence. ex : 1112131516171819")
+	fmt.Println("Make sure the list of number that you insert is in correct format. If not program will automatically close :)")
+
+	scanner := bufio.NewScanner(os.Stdin)
+	fmt.Printf("\ninput : ")
+	scanner.Scan()
+	input := scanner.Text()
+
+	result, err := loop(input)
+
+	if err == false {
+		fmt.Println("result :", result)
+	} else {
+		fmt.Println("result : not found :(")
 	}
 }
