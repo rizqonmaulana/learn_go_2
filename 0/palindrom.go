@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"errors"
 	"bufio"
 	"os"
 	"strings"
@@ -32,19 +31,19 @@ func palindromCheck(i int, reverse int) bool {
 }
 
 // func errorCheck is for check the input value is it on correct format or not
-func errorCheck(int1, int2 int) error {
+func errorCheck(int1, int2 int) string {
 	if int1 > int2 {
 		// check is int1 value is higher than int2 ?
-		return errors.New("int2 value cannot lower than int1 value")
+		return "int2 value cannot lower than int1 value"
 	} else if int1 < 1 {
 		// check is int1 value is lower than 1 ?
-		return errors.New("int value cannot lower than 1")
+		return "int value cannot lower than 1"
 	} else if int2 > 1000000000 {
 		// check is int2 value is higher than 10^9
-		return errors.New("int value cannot higher than 10^9")
+		return "int value cannot higher than 10^9"
 	} else {
 		// if there is no error return nil to tell that there is no error
-		return nil
+		return ""
 	}
 }
 
@@ -109,8 +108,8 @@ func scanInput() {
 					if yes print error message
 					if no run the loop function
 				*/
-				if err != nil {	
-					fmt.Println(err.Error())
+				if err != "" {	
+					fmt.Println(err)
 				} else {
 					result := loop(int1, int2)
 					fmt.Println("output :",result)
