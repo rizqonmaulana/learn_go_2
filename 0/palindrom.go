@@ -8,17 +8,27 @@ import (
 	"strconv"
 )
 
-func reverseInt(n int) int {
-    newInt := 0
-    for n > 0 {
-        remainder := n % 10
-        newInt *= 10
-        newInt += remainder 
-        n /= 10
-    }
-    return newInt 
-}
+// func for referse integer
+func reverseInt(value int) int {
+	// conver int to string
+    intString := strconv.Itoa(value)
 
+    newString := ""
+
+	// loop the string and reverse it by index
+    for x := len(intString); x > 0; x-- {
+        newString += string(intString[x - 1])
+    }
+
+	// conver to integer
+    newInt, err := strconv.Atoi(newString)
+
+    if(err != nil){
+        fmt.Println("Error converting string to int")
+    }
+
+    return newInt
+}
 //func palindromCheck is to check is the input a palindrom or not
 func palindromCheck(i int, reverse int) bool {
 	if i == reverse {

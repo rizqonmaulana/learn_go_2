@@ -8,10 +8,12 @@ import (
 	"os"
 )
 
+// struct for book
 type Book struct {
 	Category, Title, Size string
 }
 
+// function for convert string to book struct
 func toStruct(input string) Book {
 	var book Book
 	book.Category = input[0:1]
@@ -21,18 +23,14 @@ func toStruct(input string) Book {
 	return book
 }
 
+// function for sort by size
 func sortingSlice(books []Book) {
 	sort.Slice(books, func(i, j int) bool {
-		if books[i].Size > books[j].Size {
-			return true
-		}
-		if books[i].Size < books[j].Size {
-			return false
-		}
-		return books[i].Size < books[j].Size
+		return books[i].Size > books[j].Size
 	})
 }
 
+// function for remove more than double book
 func removeTripleBook(books []Book) []Book{
 	var result []Book
 	var title1 string
@@ -62,6 +60,8 @@ func removeTripleBook(books []Book) []Book{
 	return result
 }
 
+
+// function for conver book struct to string
 func toStr(books []Book) string{
 	var result string
 
@@ -77,10 +77,13 @@ func toStr(books []Book) string{
 	return result
 }
 
+
 func sortByCategory(input []string) string{
+	// declare variables as a container for each category
 	var books0, books1, books2, books3, books4, books5, books6, books7, books8, books9 []Book
 	var strBook0, strBook1, strBook2, strBook3, strBook4, strBook5, strBook6, strBook7, strBook8, strBook9 string
 
+		// input grouping by category
 		for i:=0; i<len(input); i++ {
 			toStruct := toStruct(input[i])
 
@@ -107,6 +110,7 @@ func sortByCategory(input []string) string{
 			}
 		}
 
+		// run func sortingSlice for sort value by book size
 		sortingSlice(books1)
 		sortingSlice(books2)
 		sortingSlice(books3)
@@ -117,6 +121,7 @@ func sortByCategory(input []string) string{
 		sortingSlice(books8)
 		sortingSlice(books9)
 
+		// conver book struct to string
 		strBook0 = toStr(books0)
 		strBook1 = toStr(books1)
 		strBook2 = toStr(books2)
@@ -129,8 +134,9 @@ func sortByCategory(input []string) string{
 		strBook9 = toStr(books9)
 
 
-		removeTripleBook(books3)
+		// removeTripleBook(books3)
 		
+		// join all category & trim space
 		result := strBook6 + "" + strBook7 + "" + strBook0 + "" + strBook9 + "" + strBook4 + "" + strBook8 + "" + strBook1 + "" + strBook2 + "" + strBook5 + "" + strBook3 + "\n"
 		return strings.TrimSpace(result)
 	}
@@ -142,13 +148,18 @@ func main() {
 	fmt.Println("enter a book list that you want to sort. ex : 3A13 5X19 9Y20 2C18 1N20 3N20 1M21 1F14 9A21 3N21 0E13 5G14 8A23 9E22 3N14")
 	fmt.Println("Make sure the book code you enter is 4 characters long. If not program will automatically close :)")
 	
+	// scan input from terminal
 	scanner := bufio.NewScanner(os.Stdin)
 	fmt.Printf("\ninput : ")
 	scanner.Scan()
 	input := scanner.Text()
 
+	// split input by space
 	split := strings.Split(input, " ")
 	
+	// run func sortByCategory to sort the input
 	result := sortByCategory(split)
+
+	// print result
 	fmt.Println("result :",result)
 }
