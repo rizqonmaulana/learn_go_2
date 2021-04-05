@@ -62,7 +62,7 @@ func loop(int1 int, int2 int) int {
 
 func palindrom(w http.ResponseWriter, r *http.Request) {
     input1 := 1
-    input2 := 10
+    input2 := 9999
     result := loop(input1, input2)
 
     input1Str := strconv.Itoa(input1)
@@ -74,8 +74,11 @@ func palindrom(w http.ResponseWriter, r *http.Request) {
 
 
 func main() {
-    http.HandleFunc("/", palindrom) // setting router rule
-    err := http.ListenAndServe(":9090", nil) // setting listening port
+    // setting router rule
+    http.HandleFunc("/", palindrom)
+    
+    // setting listening port and error handling
+    err := http.ListenAndServe(":9090", nil) 
     if err != nil {
         log.Fatal("ListenAndServe: ", err)
     }
